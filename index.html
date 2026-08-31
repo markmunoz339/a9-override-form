@@ -521,14 +521,19 @@ async function lookupVIN() {
   }
   const rec = inventory[raw];
   if (!rec) {
-    setVinStatus('⚠️ VIN not found in KZX inventory — please enter vehicle info manually', 'not-found');
+    setVinStatus('⚠️ VIN not found in KZX inventory — please enter vehicle info manually below', 'not-found');
     clearVehicle();
-    // Unlock fields for manual entry
+    // Unlock all vehicle fields for manual entry
     ['full-vin','last8-display','model-year','nameplate','dealer-code','dealer-name'].forEach(id => {
-      document.getElementById(id).removeAttribute('readonly');
-      document.getElementById(id).removeAttribute('disabled');
+      const el = document.getElementById(id);
+      el.readOnly = false;
+      el.removeAttribute('readonly');
+      el.removeAttribute('disabled');
+      el.style.cssText = 'background:#fff !important; color:#1a1a2e !important; cursor:text !important;';
+      el.placeholder = 'Enter manually';
     });
     document.getElementById('last8-display').value = raw;
+    document.getElementById('full-vin').focus();
     return;
   }
   // Populate vehicle fields
